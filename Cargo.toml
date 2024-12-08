@@ -23,6 +23,8 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 reqwest = "0.12.9"
 serde = { version = "1.0", features = ["derive"] }
 config = "0.14.1"
+uuid = { version = "1.11.0", features = ["v4"] }
+chrono = "0.4.38"
 
 [dependencies.sqlx]
 version = "0.8.2"
