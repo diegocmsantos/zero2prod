@@ -4,6 +4,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install lld clang -y
 COPY . .
 ENV SQLX_OFFLINE=true
+RUN cargo sqlx prepare
 RUN cargo build --release
 # Runtime stage
 FROM rust:1.83.0-slim AS runtime
