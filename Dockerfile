@@ -13,7 +13,7 @@
 # COPY --from=builder /app/target/release/zero2prod zero2prod
 # # We need the configuration file at runtime!
 # COPY configuration configuration
-# ENV APP_ENVIRONMENT=production
+# RONMENT=production
 # ENTRYPOINT ["./zero2prod"]
 
 FROM lukemathwalker/cargo-chef:latest-rust-latest as chef
@@ -33,9 +33,10 @@ COPY . .
 ENV SQLX_OFFLINE true
 # Build our project
 RUN cargo build --release --bin zero2prod
-FROM debian:bullseye-slim AS runtime
+FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 RUN apt-get update -y \
+  && apt-get install -y libc6 \
   && apt-get install -y --no-install-recommends openssl ca-certificates \
   # Clean up
   && apt-get autoremove -y \
