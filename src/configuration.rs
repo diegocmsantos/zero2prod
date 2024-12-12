@@ -59,45 +59,59 @@ impl TryFrom<String> for Environment {
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
-    // let builder = Config::builder().add_source(config::File::with_name("configuration"));
-
+    let mut settings = config::Config::default();
     let base_path = std::env::current_dir().expect("Failed to determine the current directory");
     let configuration_directory = base_path.join("configuration");
-
-    // Detect the running enviroment.
-    // Default to "local" if unspecified.
+    settings.merge(config::File::from(configuration_directory.join("base")).required(true))?;
     let environment: Environment = std::env::var("APP_ENVIRONMENT")
         .unwrap_or_else(|_| "local".into())
         .try_into()
-        .expect("Failed to parse APP_ENVIRONMENT");
+        .expect("Failed to parse APP_ENVIRONMENT.");
+    settings.merge(
+        config::File::from(configuration_directory.join(environment.as_str())).required(true),
+    )?;
+    // Add in settings from environment variables (with a prefix of APP and '__' as separator) // E.g. `APP_APPLICATION__PORT=5001 would set `Settings.application.port` settings.merge(config::Environment::with_prefix("app").separator("__"))?;
+    settings.try_into()
 
-    // Read the "default" configuration
-    let builder = Config::builder()
-        .add_source(
-            config::File::with_name(configuration_directory.join("base").to_str().unwrap())
-                .required(true),
-        )
-        .add_source(
-            config::File::with_name(
-                configuration_directory
-                    .join(environment.as_str())
-                    .to_str()
-                    .unwrap(),
-            )
-            .required(true),
-        )
-        .add_source(config::Environment::with_prefix("app").separator("__"));
+    // let builder = Config::builder().add_source(config::File::with_name("configuration"));
 
-    match builder.build() {
-        Ok(config) => {
-            // use your config
-            config.try_deserialize::<Settings>()
-        }
-        Err(e) => {
-            // something went wrong
-            Err(e)
-        }
-    }
+    // let base_path = std::env::current_dir().expect("Failed to determine the current directory");
+    // let configuration_directory = base_path.join("configuration");
+    //
+    // // Detect the running enviroment.
+    // // Default to "local" if unspecified.
+    // let environment: Environment = std::env::var("APP_ENVIRONMENT")
+    //     .unwrap_or_else(|_| "local".into())
+    //     .try_into()
+    //     .expect("Failed to parse APP_ENVIRONMENT");
+    //
+    // // Read the "default" configuration
+    // let builder = Config::builder()
+    //     .add_source(
+    //         config::File::with_name(configuration_directory.join("base").to_str().unwrap())
+    //             .required(true),
+    //     )
+    //     .add_source(
+    //         config::File::with_name(
+    //             configuration_directory
+    //                 .join(environment.as_str())
+    //                 .to_str()
+    //                 .unwrap(),
+    //         )
+    //         .required(true),
+    //     )
+    //     .add_source(config::Environment::with_prefix("app").separator("__"));
+    //
+    // match builder.build() {
+    //     Ok(config) => {
+    //         // use your config
+    //         config.try_deserialize::<Settings>()
+    //     }
+    //     Err(e) => {
+    //         // something went wrong
+    //         Err(e)
+    //     }
+    // }
 }
 
 impl DatabaseSettings {
