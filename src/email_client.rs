@@ -1,4 +1,4 @@
-// Postmark temporary email n4anh@freesourcecodes.com
+// Postmark temporary email n4anh@freesourcecodes.com @ https://internxt.com/temporary-email
 use crate::domain::SubscriberEmail;
 use reqwest::Client;
 use secrecy::{ExposeSecret, SecretString};

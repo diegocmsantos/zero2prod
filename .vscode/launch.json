@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "codelldb",
+      "request": "launch",
+      "name": "Debug",
+      "program": "./target/debug/zero2prod",
+      "args": [],
+      "sourceLanguages": [
+        "rust"
+      ],
+      "env": {
+        "APP_ENVIRONMENT": "production",
+        "APP_APPLICATION__BASE_URL": "127.0.0.1"
+      }
+    }
+  ]
+}
