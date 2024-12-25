@@ -12,7 +12,8 @@
       ],
       "env": {
         "APP_ENVIRONMENT": "production",
-        "APP_APPLICATION__BASE_URL": "127.0.0.1"
+        "APP_APPLICATION__BASE_URL": "127.0.0.1",
+        "RUST_LOG": "trace"
       }
     }
   ]

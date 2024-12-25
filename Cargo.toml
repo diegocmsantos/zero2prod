@@ -44,6 +44,8 @@ sqlx = {version = "0.8.2", default-features = false,features = [
   "chrono",
   "migrate"
 ]}
+thiserror = "2.0.9"
+anyhow = "1.0.95"
 
 [dev-dependencies]
 once_cell = "1.20.2"
